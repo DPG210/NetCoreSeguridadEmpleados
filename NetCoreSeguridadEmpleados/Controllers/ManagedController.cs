@@ -64,7 +64,7 @@ namespace NetCoreSeguridadEmpleados.Controllers
                     TempData["controller"].ToString();
                 string action =
                     TempData["action"].ToString();
-                if (TempData["idempleado"] != null)
+                if (TempData["id"] != null)
                 {
                     string id =
                     TempData["id"].ToString();

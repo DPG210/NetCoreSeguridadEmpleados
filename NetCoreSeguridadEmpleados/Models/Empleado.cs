@@ -15,6 +15,8 @@ namespace NetCoreSeguridadEmpleados.Models
         public string Oficio { get; set; }
         [Column("SALARIO")]
         public int Salario { get; set; }
+        [Column("DIR")]
+        public int Subordinado { get; set; }
         [Column("DEPT_NO")]
         public int IdDepartamento { get; set; }
     }

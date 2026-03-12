@@ -12,6 +12,7 @@ builder.Services.AddControllersWithViews
     .AddSessionStateTempDataProvider();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication
     (options =>
     {
@@ -40,6 +41,8 @@ builder.Services.AddAuthorization(options =>
         policy => policy.RequireClaim("Admin"));
     options.AddPolicy("SoloRicos",
         policy => policy.Requirements.Add(new OverSalarioRequirement()));
+    options.AddPolicy("TieneSubordinados",
+        policy => policy.Requirements.Add(new ConSubordinadosRequirement()));
 });
 
 string connectionString = builder.Configuration.GetConnectionString("SqlHospital");

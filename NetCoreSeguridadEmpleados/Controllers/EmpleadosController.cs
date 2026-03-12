@@ -20,9 +20,10 @@ namespace NetCoreSeguridadEmpleados.Controllers
             List<Empleado> empleados = await this.repo.GetEmpledosAsync();
             return View(empleados);
         }
-        public async Task<IActionResult> Details(int idEmpleado)
+        [AuthorizeEmpleados]
+        public async Task<IActionResult> Details(int id)
         {
-            Empleado empleado = await this.repo.FindEmpleado(idEmpleado);
+            Empleado empleado = await this.repo.FindEmpleado(id);
             return View(empleado);
         }
         [AuthorizeEmpleados]
@@ -64,6 +65,12 @@ namespace NetCoreSeguridadEmpleados.Controllers
         public async Task<IActionResult> ZonaNoble()
         {
             return View();
+        }
+        [AuthorizeEmpleados(Policy =("TieneSubordinados"))]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await this.repo.DeleteEmpleado(id);
+            return RedirectToAction("Index","Empleados");
         }
     }
 }

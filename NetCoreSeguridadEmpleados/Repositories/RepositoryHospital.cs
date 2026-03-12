@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using NetCoreSeguridadEmpleados.Data;
 using NetCoreSeguridadEmpleados.Models;
 
@@ -42,6 +43,19 @@ namespace NetCoreSeguridadEmpleados.Repositories
                 (z => z.Apellido == apellido
                 && z.IdEmpleado == idEmpleado);
             return empleado;
+        }
+        public async Task DeleteEmpleado(int idEmpleado)
+        {
+            string sql = "delete from emp where emp_no=@idempleado";
+
+            SqlParameter pamId = new SqlParameter("@idempleado", idEmpleado);
+
+            await this.context.Database.ExecuteSqlRawAsync(sql, pamId);
+        }
+        public async Task<bool> BuscarSubordinados(int idEmpleado)
+        {
+            return await this.context.Empleados
+                .AnyAsync(z => z.Subordinado == idEmpleado);
         }
     }
 }

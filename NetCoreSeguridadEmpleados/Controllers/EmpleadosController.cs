@@ -55,5 +55,15 @@ namespace NetCoreSeguridadEmpleados.Controllers
                 await this.repo.GetEmpleadosDepartamentoAsync(idDepartamento);
             return View(empleados);
         }
+        [AuthorizeEmpleados(Policy =("AdminOnly"))]
+        public async Task<IActionResult> AdminEmpleados()
+        {
+            return View();
+        }
+        [AuthorizeEmpleados(Policy =("SoloRicos"))]
+        public async Task<IActionResult> ZonaNoble()
+        {
+            return View();
+        }
     }
 }

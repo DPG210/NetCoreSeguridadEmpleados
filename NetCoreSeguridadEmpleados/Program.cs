@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using NetCoreSeguridadEmpleados.Data;
+using NetCoreSeguridadEmpleados.Policies;
 using NetCoreSeguridadEmpleados.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +36,10 @@ builder.Services.AddAuthorization(options =>
     //LOS ROLES
     options.AddPolicy("SOLOJEFES",
         policy => policy.RequireRole("PRESIDENTE","DIRECTOR","ANALISTA"));
+    options.AddPolicy("AdminOnly",
+        policy => policy.RequireClaim("Admin"));
+    options.AddPolicy("SoloRicos",
+        policy => policy.Requirements.Add(new OverSalarioRequirement()));
 });
 
 string connectionString = builder.Configuration.GetConnectionString("SqlHospital");

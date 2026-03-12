@@ -32,7 +32,7 @@ namespace NetCoreSeguridadEmpleados.Controllers
             return View();
         }
 
-        [AuthorizeEmpleados]
+        [AuthorizeEmpleados(Policy ="SOLOJEFES")]
         public async Task <IActionResult> Compis()
         {
             //RECUPERAMOS EL CLAIM DEL USUARIO VALIDADO
@@ -40,8 +40,20 @@ namespace NetCoreSeguridadEmpleados.Controllers
                 HttpContext.User.FindFirstValue("Departamento");
             int idDepartamento = int.Parse(dato);
             List<Empleado> compañeros = 
-                await this.repo.GetEmpleadosDepartamento(idDepartamento);
+                await this.repo.GetEmpleadosDepartamentoAsync(idDepartamento);
             return View(compañeros);
+        }
+        [AuthorizeEmpleados]
+        [HttpPost]
+        public async Task<IActionResult> Compis(int incremento)
+        {
+            string dato =
+                HttpContext.User.FindFirstValue("Departamento");
+            int idDepartamento = int.Parse(dato);
+            await this.repo.UpdateSalarioEmpleadosAsync(idDepartamento, incremento);
+            List<Empleado> empleados =
+                await this.repo.GetEmpleadosDepartamentoAsync(idDepartamento);
+            return View(empleados);
         }
     }
 }

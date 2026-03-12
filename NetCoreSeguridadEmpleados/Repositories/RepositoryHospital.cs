@@ -20,7 +20,7 @@ namespace NetCoreSeguridadEmpleados.Repositories
         {
             return await this.context.Empleados.FirstOrDefaultAsync(x => x.IdEmpleado == idEmpleado);
         }
-        public async Task<List<Empleado>> GetEmpleadosDepartamento(int idDepartamento)
+        public async Task<List<Empleado>> GetEmpleadosDepartamentoAsync(int idDepartamento)
         {
             return await this.context.Empleados
                 .Where(z => z.IdDepartamento == idDepartamento)
@@ -28,10 +28,10 @@ namespace NetCoreSeguridadEmpleados.Repositories
         }
         public async Task UpdateSalarioEmpleadosAsync(int idDepartamento, int incremento)
         {
-            List <Empleado> empleados = await this.GetEmpleadosDepartamento(idDepartamento);
+            List <Empleado> empleados = await this.GetEmpleadosDepartamentoAsync(idDepartamento);
             foreach(Empleado emp in empleados)
             {
-                emp.Salario *= incremento;
+                emp.Salario += incremento;
             }
             await this.context.SaveChangesAsync();
         }

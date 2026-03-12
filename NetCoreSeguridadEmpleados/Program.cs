@@ -7,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews
-    (options => options.EnableEndpointRouting = false);
+    (options => options.EnableEndpointRouting = false)
+    .AddSessionStateTempDataProvider();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddAuthentication
@@ -19,7 +20,22 @@ builder.Services.AddAuthentication
         CookieAuthenticationDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme =
         CookieAuthenticationDefaults.AuthenticationScheme;
-    }).AddCookie();
+    }).AddCookie(
+    CookieAuthenticationDefaults.AuthenticationScheme,
+    config =>
+    {
+        config.AccessDeniedPath = "/Managed/ErrorAcceso";
+    });
+
+
+//LAS POLITICAS SE AGREGAN CON AUTHORIZATION
+builder.Services.AddAuthorization(options =>
+{
+    //AQUI DEBEMOS CREAR LAS POLICIES QUE NECESITEMOS PARA 
+    //LOS ROLES
+    options.AddPolicy("SOLOJEFES",
+        policy => policy.RequireRole("PRESIDENTE","DIRECTOR","ANALISTA"));
+});
 
 string connectionString = builder.Configuration.GetConnectionString("SqlHospital");
 builder.Services.AddDbContext<HospitalContext>
